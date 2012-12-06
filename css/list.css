@@ -1,0 +1,150 @@
+html,body{
+	margin:0;
+	padding:0;
+	font-family:verdana,sans-serif;
+	font-size:14px;
+	line-height:1.8em;
+	-moz-user-select:none;	
+	/*overflow:hidden;
+	cursor:none;*/
+}
+a:focus { 
+	outline: none; 
+}
+.clear{
+	clear:both;
+}
+.hidden{
+	display:none;
+	visibility:hidden;
+}
+h1,h2,h3{
+	font-family: 'CabinRegular', verdana, sans-serif;
+	font-weight:normal;
+}
+h1{
+	font-size:48px;
+	line-height:44px;
+	margin:40px 0 10px 0;
+	color:#71011a;
+	font-weight:normal;
+}
+h2{
+	font-size:24px;
+	line-height:20px;
+	color:#57420b;
+	margin:0 0 60px 0;
+	font-weight:normal;
+}
+#container{
+	width:1920px;
+	height:1080px;
+	background-color:#DBE9B6;
+	background-image:url(../images/bg.png);
+	overflow:hidden;
+	position:relative;
+	top:0;
+	left:0;
+}
+#title{
+	position:absolute;
+	top:40px;
+	left:40px;
+	width:1840px;
+	height:80px;
+}
+#title h1{
+	margin:0;
+	padding:0;
+	width:100%;
+	height:50px;
+	line-height:50px;
+	font-size:50px;
+}
+#title h2{
+	margin:0;
+	padding:0;
+	width:100%;
+	height:30px;
+	line-height:30px;
+	font-size:30px;
+}
+#list{
+	position:absolute;
+	left:40px;
+	overflow:hidden;
+	top:140px;
+	width:1800px;
+	height:900px;
+	margin:0;
+	padding:0;
+	list-style-type:none;
+	
+}
+#list.loading{
+	background-image:url(../images/loader.gif);
+	background-position:center 340px;
+	background-repeat:no-repeat;
+}
+#list.loading li{
+	display:none;
+	visibility:hidden;
+}
+#list li{
+	margin:0;
+	overflow:hidden;
+	float:left;
+	margin:10px 20px 10px 0;
+	padding:10px;
+	width:320px;
+	height:140px;
+	-moz-border-radius: 20px;
+	color:#243006;
+	font-size:18px;
+	line-height:20px;
+}
+#list p{
+	margin:5px 0;
+}
+#list h3{
+	font-size:32px;
+	margin:0;
+	line-height:30px;
+	color:#E1EAC7;
+	color:#243006;
+	text-shadow: 0px 0px 8px #fff;	
+}
+#data{
+	display:none;
+	visibility:hidden;
+}
+#back{
+	z-index:100;
+	position:absolute;
+	width:117px;
+	height:151px;
+	right:60px;
+	bottom:60px;
+	text-align:center;
+}
+#back a{
+	text-decoration:none;
+	color:#fff;
+	font-size:24px;
+	line-height:24px;
+	text-transform:uppercase;
+	text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+#back img{
+	-moz-border-radius: 20px;
+	padding:25px 12px 25px 11px; 
+	margin:10px 0 0 0;
+	border:3px solid rgba(0,0,0,0.15);
+	background-image: -moz-linear-gradient(
+	    center bottom,
+	    rgba(45,55,20,0.6) 25%,
+	    rgba(90,108,46,0.6) 75%
+	);
+	-moz-box-shadow: 1px 2px 4px 0px rgba(0,0,0,0.4);
+}
+
