@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="css/cabin-fontfacekit/stylesheet.css" type="text/css" media="screen" />
 <link rel="stylesheet" href="css/index.css" type="text/css" media="screen" />
 <script type="text/javascript" src="js/jquery-1.6.1.min.js"></script>
+<script type="text/javascript" src="js/googleSpreadsheetParser.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
 </head>
 <body>
@@ -14,7 +15,7 @@
 			<h2>All<br>Donors</h2>
 		</div>
 		<div id="center">
-			<a id="logo" href="#"><img src="images/logo.png"></a>	
+			<a id="logo" href="#"><img src="images/new_logo.png"></a>
 			<div id="submenu" class="hidden">
 				<h2>&nbsp;</h2>
 				<ul>
@@ -26,8 +27,8 @@
 		<div id="right">
 			<h2>Donor<br>Categories</h2>
 			<ul id="menu">
-				<li id="vis"><a href="#">Visionaries</a>
-					<ul>
+				<li id="vis" class='hidden'><a href="#">Visionaries</a>
+					<ul class='hidden'>
 						<li><a href="vis.promega.html">Promega <br>Corporation</a></li>
 						<li><a href="vis.thermo-fisher.html">Thermo Fisher<br> Scientific</a></li>
 						<li><a href="vis.bruker.html">Bruker<br>Corporation</a></li>
@@ -38,9 +39,9 @@
 						<li><a href="vis.linton.html">Bill & Mary<br>Linton</a></li>
 					</ul>
 				</li>
-				<li id="spc">
+				<li id="spc" class='hidden'>
 					<a href="#">Spaces</a>
-					<ul>
+					<ul class='hidden'>
 						<li><a href="spc.community-meeting.html">Community Meeting</a></li>
 						<li><a href="spc.board-room.html">Conference Room</a></li>
 						<li><a href="spc.tech-center.html">Technology Center</a></li>
@@ -59,23 +60,23 @@
 
 					</ul>
 				</li>
-				<li id="collection-dev">
+				<li id="collection-dev" class='hidden'>
 					<a href="#">Collection Development</a>
-					<ul>	
+					<ul class='hidden'>
 						<li><a href="list.html?collectiondevelopment=Patrons%20(%2425%2C000%20%2B)&title=Patrons&subtitle=$25,000%2B">Patrons ($25,000+)</a></li>
 						<li><a href="list.html?collectiondevelopment=Benefactors(%2410%2C000%20to%20%2424%2C999)&title=Benefactors&subtitle=$10,000%2B">Benefactors ($10,000+)</a></li>
 						<li><a href="list.html?collectiondevelopment=Sponsors%20(%245000%20to%20%249999)&title=Sponsors&subtitle=$5,000%2B">Sponsors ($5,000+)</a></li>
 						<li><a href="list.html?collectiondevelopment=Supporters%20(%241000%20to%20%244999)&title=Supporters&subtitle=$1,000%2B">Supporters ($1,000+)</a></li>
 						<li><a href="list.html?collectiondevelopment=Friends%20(%24500%20to%20%24999)&title=Friends&subtitle=$500%2B">Friends ($500+)</a></li>
 						<li><a href="list.html?collectiondevelopment=Contributors%20(up%20to%20%24499)&title=Contributors&subtitle=up%20to%20$499">Contributors (up to $499)</a></li>
-						<li><a href="list.html?specialcollections=&title=Special%20Collections">Special Collections</a></li>					
+						<li><a href="list.html?specialcollections=&title=Special%20Collections">Special Collections</a></li>
 					</ul>
 				</li>
-				<li id="technolog"><a href="list.html?technology=&title=Technology&subtitle=Specific%20Donations">Technology</a></li>
-				<li id="in-kind"><a href="list.html?inkind=&title=In-Kind&subtitle=Specific%20Donations">In Kind</a></li>
-				<li id="categories">
+				<li id="technolog" class='hidden'><a href="list.html?technology=&title=Technology&subtitle=Specific%20Donations">Technology</a></li>
+				<li id="in-kind" class='hidden'><a href="list.html?inkind=&title=In-Kind&subtitle=Specific%20Donations">In Kind</a></li>
+				<li id="categories" class='hidden'>
 					<a href="#">Giving Categories</a>
-					<ul>
+					<ul class='hidden'>
 						<li><a href="list.html?category=1000000&title=$1,000,000&subtitle=Giving%20Category">$1,000,000</a></li>
 						<li><a href="list.html?category=300000&title=$100,000 - 300,000&subtitle=Giving%20Category">$100,000 - 300,000</a></li>
 						<li><a href="list.html?category=99999&title=$35,000 - 99,999&subtitle=Giving%20Category">$35,000 - 99,999</a></li>
@@ -83,7 +84,7 @@
 						<li><a href="list.html?category=9999&title=$1000 - 9999&subtitle=Giving%20Category">$1000 - 9999</a></li>
 						<li><a href="list.html?category=999&title=Up to $1000&subtitle=Giving%20Category">Up to $1000</a></li>
 					</ul>
-				</li>	
+				</li>
 			</ul>
 		</div>
 	</div>

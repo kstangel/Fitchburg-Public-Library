@@ -1,63 +1,101 @@
+//var url = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dEY2R3dna1ZCdHctREFrbGRscW9MTEE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Original Donors Spreadsheet
+var DONOR_URL = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Testing Donors Spreadsheet
+var MEMBER_CATEGORIES_URL = "https://spreadsheets.google.com/feeds/cells/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/2/public/basic?alt=json-in-script&callback=?";
+
 var display_count = 20;
 var display_time = 5000;
 var data = new Array();
 var visibleIndex = -1;
 var $ls;
+var categories = [], donors = [];
+
+
 $(function(){
-	var activeID = getCookie('active_menu');
-	if(!activeID) activeID = 'spc';
-	loadMenu(activeID);
-	$('#submenu').removeClass('hidden');
-	var url = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dEY2R3dna1ZCdHctREFrbGRscW9MTEE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?';
+	var $menu = $('#menu');
+	var $hiddenMenuItems = $menu.find("li.hidden > a");
+
+	fetchSheet(MEMBER_CATEGORIES_URL,categories,function(){
+		categories.forEach(function(c,i){
+			var topLevelLink = c.secondlevelcategory ? '#' : 'list.html?category='+encodeURIComponent(c.toplevelcategory);
+			var $subCategory = $("<li id='"+getId(c.toplevelcategory)+"'><a href='"+topLevelLink+"'>"+c.toplevelcategory+"</a><ul class='second-menu'></ul></li>");
+			$menu.append($subCategory);
+			if (c.secondlevelcategory){
+				c.secondlevelcategory.split(',').forEach(function(s,j){
+					var existingLinks = false;
+					$hiddenMenuItems.each(function(){
+						if ( $(this).text() == s ){
+							existingLinks = true;
+							$subCategory.find('.second-menu').append($(this).parent());
+							$subCategory.find('.second-menu li').removeClass('hidden');
+						}
+					});
+					if(!existingLinks){
+						$subCategory.find('.second-menu').append("<li><a href='list.html?category="+encodeURIComponent(s)+"'>"+s+"</a></li>");
+					}
+				});
+			}
+		});
+		var activeID = getCookie('active_menu');
+		if(!activeID) activeID = $menu.find('li').first().attr('id');
+		loadMenu(activeID);
+		$('#submenu').removeClass('hidden');
+		$('a').click(function(e){
+			loadMenu($(e.target).parent().attr('id'));
+		});
+ 	});
+
+	//I left this in from the original...could have used fetchSheet but if it's not broke don't fix it.
 	$ls = $('<ul></ul>').appendTo('#left');
-	$.getJSON(url,function(json){
+	$.getJSON(DONOR_URL,function(json){
 		var donor = json.feed.entry;
 		var $ds = $('<ul></ul>').appendTo('#data');
 		var j = display_count;
 		$.each(donor,function(i,v){
-			if(j == display_count){
-				data.push($('<ul></ul>'));
-				visibleIndex++;
-				j = 0;	
-			}else j++;
-			$ds.append('<li><h3>'+v.title.$t+'</h3><p>'+v.content.$t+'</p></li>');
-			data[visibleIndex].append('<li>'+v.title.$t+'</li>');	
+			if (v.title.$t.toLowerCase().indexOf('anonymous') == -1){
+				if(j == display_count){
+					data.push($('<ul></ul>'));
+					visibleIndex++;
+					j = 0;
+				}else j++;
+				$ds.append('<li><h3>'+v.title.$t+'</h3><p>'+v.content.$t+'</p></li>');
+				data[visibleIndex].append('<li>'+v.title.$t+'</li>');
+			}
 		});
 		visibleIndex = Math.floor(Math.random()*data.length);
-		updateList();	
+		updateList();
 	});
-	$('#menu a').click(function(e){
-		loadMenu($(e.target).parent().attr('id'));
-	});
+
 	function loadMenu(id){
 		var $a = $('#'+id);
 		var $link = $a.children('a');
-		if(!$a.hasClass('selected') && $link.attr('href') == '#'){ 
+		if(!$a.hasClass('selected') && $link.attr('href') == '#'){
 			setCookie('active_menu',id,1);
 			$('#menu .selected').removeClass('selected');
 			$a.addClass('selected');
 			var $b = $('#submenu');
 			$('h2',$b).text($link.text());
-			$('ul',$b).html($('ul',$a).html());   
+			$('ul',$b).html($('ul',$a).html());
+			$b.find('a').click(function(e){
+				loadMenu($(e.target).parent().attr('id'));
+			});
 		}
-
 	}
 	function setCookie(name,value,days) {
-	    if (days) {
-		var date = new Date();
-		date.setTime(date.getTime()+(days*24*60*60*1000));
-		var expires = "; expires="+date.toGMTString();
-	    }
-	    else var expires = "";
-	    document.cookie = name+"="+value+expires+"; path=/";
+		if (days) {
+			var date = new Date();
+			date.setTime(date.getTime()+(days*24*60*60*1000));
+			var expires = "; expires="+date.toGMTString();
+		}
+		else var expires = "";
+	   document.cookie = name+"="+value+expires+"; path=/";
 	}
 	function getCookie(name) {
 	    var nameEQ = name + "=";
 	    var ca = document.cookie.split(';');
 	    for(var i=0;i < ca.length;i++) {
-		var c = ca[i];
-		while (c.charAt(0)==' ') c = c.substring(1,c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+			var c = ca[i];
+			while (c.charAt(0)==' ') c = c.substring(1,c.length);
+			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
 	    }
 	    return null;
 	}
@@ -73,5 +111,5 @@ function updateList(){
 		$ls.fadeIn('slow', function(){
 			if(data.length > 1) setTimeout('updateList()',display_time);
 		});
-	});	
+	});
 }
