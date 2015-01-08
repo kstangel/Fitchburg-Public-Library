@@ -1,20 +1,20 @@
 //var url = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dEY2R3dna1ZCdHctREFrbGRscW9MTEE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Original Donors Spreadsheet
 var DONOR_URL = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Testing Donors Spreadsheet
-var MEMBER_CATEGORIES_URL = "https://spreadsheets.google.com/feeds/cells/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/2/public/basic?alt=json-in-script&callback=?";
+var CATEGORIES_URL = "https://spreadsheets.google.com/feeds/cells/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/2/public/basic?alt=json-in-script&callback=?";
 
 var display_count = 20;
 var display_time = 5000;
 var data = new Array();
 var visibleIndex = -1;
 var $ls;
-var categories = [], donors = [];
+var categories = [];
 
 
 $(function(){
 	var $menu = $('#menu');
 	var $hiddenMenuItems = $menu.find("li.hidden > a");
 
-	fetchSheet(MEMBER_CATEGORIES_URL,categories,function(){
+	fetchSheet(CATEGORIES_URL,categories,function(){
 		categories.forEach(function(c,i){
 			var topLevelLink = c.secondlevelcategory ? '#' : 'list.html?category='+encodeURIComponent(c.toplevelcategory);
 			var $subCategory = $("<li id='"+getId(c.toplevelcategory)+"'><a href='"+topLevelLink+"'>"+c.toplevelcategory+"</a><ul class='second-menu'></ul></li>");

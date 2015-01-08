@@ -1,14 +1,18 @@
+//var DONOR_LIST_URL = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dEY2R3dna1ZCdHctREFrbGRscW9MTEE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Original Donors Spreadsheet
+var DONOR_LIST_URL = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Testing Donors Spreadsheet
+var DONOR_CELLS_URL = "https://spreadsheets.google.com/feeds/cells/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/1/public/basic?alt=json-in-script&callback=?";
+
 var display_count = 25;
 var display_time = 10000;
 var data = new Array();
 var visibleIndex = -1;
 var $ls;
+var donors = [];
+
 
 $(function(){
 	var columns = new Array('firstname','lastname','type','pledge','collectiondevelopment','inkind','technology','specialcollections','comments');
 	var categories = new Array(999,9999,34999,99999,300000,1000000);
-	//var url = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dEY2R3dna1ZCdHctREFrbGRscW9MTEE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Original Donors Spreadsheet
-	var url = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Testing Donors Spreadsheet
 	var $_GET = {};
 	$ls = $('ul#list');
 	document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
@@ -23,7 +27,19 @@ $(function(){
 	});*/
 
 	if($_GET['category']){
-
+		var category = $_GET['category'];
+		fetchSheet(DONOR_CELLS_URL,donors,function(){
+			donors.forEach(function(d,i){
+				if (d.donorcategories){
+					var categories = d.donorcategories.split(',');
+					categories.forEach(function(c,j){
+						if(category.toLowerCase() == c.toLowerCase() && d.fullname.toLowerCase().indexOf('anonymous') == -1 ){
+							console.log(d.fullname);
+						}
+					});
+				}
+			});
+		});
 	}
 	else{ //keep for the old columns
 		if($_GET['title']){
@@ -34,7 +50,7 @@ $(function(){
 			$('#title h2').text(unescape($_GET['subtitle']));
 			delete $_GET['subtitle'];
 		}
-		$.getJSON(url,function(json){
+		$.getJSON(DONOR_LIST_URL,function(json){
 			var donor = json.feed.entry;
 			var $ds = $('<ul></ul>').appendTo('#data');
 			var col_end = new RegExp("\\\, ("+columns.toString().replace(/\,/g,'|')+")\\\: ");
@@ -116,8 +132,9 @@ $(function(){
 					$ls.append('<li>No donors currently in this category</li>');
 				}
 			}
-		}
-	});
+		});
+	}
+
 	function formatCurrency(num) {
 		num = num.toString().replace(/\$|\,/g,'');
 		if(isNaN(num))
