@@ -26,19 +26,29 @@ $(function(){
 		return false;
 	});*/
 
-	if($_GET['category']){
+	if($_GET['category']){ //Added later on as an update to the kiosk
 		var category = $_GET['category'];
 		fetchSheet(DONOR_CELLS_URL,donors,function(){
+			var numDonors = 0;
 			donors.forEach(function(d,i){
 				if (d.donorcategories){
 					var categories = d.donorcategories.split(',');
 					categories.forEach(function(c,j){
 						if(category.toLowerCase() == c.toLowerCase() && d.fullname.toLowerCase().indexOf('anonymous') == -1 ){
-							console.log(d.fullname);
+							if (numDonors % display_count == 0){
+								visibleIndex++;
+								data.push($('<ul></ul>'));
+							}
+							data[visibleIndex].append('<li><h3>'+d.fullname+'</h3></li>');
+							numDonors++;
 						}
 					});
 				}
 			});
+			visibleIndex = Math.floor(Math.random()*data.length);
+			updateList();
+			$ls.html('');
+			$ls.removeClass('loading');
 		});
 	}
 	else{ //keep for the old columns
