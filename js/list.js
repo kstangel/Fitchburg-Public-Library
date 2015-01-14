@@ -14,7 +14,10 @@ $(function(){
 	var columns = new Array('firstname','lastname','type','pledge','collectiondevelopment','inkind','technology','specialcollections','comments');
 	var categories = new Array(999,9999,34999,99999,300000,1000000);
 	var $_GET = {};
+	var $title = $('#title');
+
 	$ls = $('ul#list');
+
 	document.location.search.replace(/\??(?:([^=]+)=([^&]*)&?)/g, function () {
 	   function decode(s) {
 			return decodeURIComponent(s.split("+").join(" "));
@@ -28,6 +31,7 @@ $(function(){
 
 	if($_GET['category']){ //Added later on as an update to the kiosk
 		var category = $_GET['category'];
+		$title.find('h1').text(category);
 		fetchSheet(DONOR_CELLS_URL,donors,function(){
 			var numDonors = 0;
 			donors.forEach(function(d,i){
@@ -45,10 +49,13 @@ $(function(){
 					});
 				}
 			});
-			visibleIndex = Math.floor(Math.random()*data.length);
-			updateList();
 			$ls.html('');
 			$ls.removeClass('loading');
+			if( numDonors != 0){
+				visibleIndex = Math.floor(Math.random()*data.length);
+				updateList();
+			}
+			else $ls.append('<li>No donors currently in this category</li>');
 		});
 	}
 	else{ //keep for the old columns
