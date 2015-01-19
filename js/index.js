@@ -46,7 +46,7 @@ $(function(){
 		if(!activeID) activeID = $menu.find('li').first().attr('id');
 		loadMenu(activeID);
 		$('#submenu').removeClass('hidden');
-		$('a:not(.scroll)').click(function(e){
+		$('a:not(.scroll,#external-btn)').click(function(e){
 			loadMenu($(e.target).parent().attr('id'));
 		});
  	});
@@ -87,6 +87,10 @@ $(function(){
 		if(scroll <= 0) $prevBtn.hide();
 		if(scroll < $menu.height()) $nextBtn.show();
 		$menu.animate({scrollTop:scroll},750);
+	});
+
+	$('#external-btn').click(function(){
+
 	});
 
 	function loadMenu(id){
