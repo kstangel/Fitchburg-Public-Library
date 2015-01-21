@@ -1,6 +1,7 @@
 //var url = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dEY2R3dna1ZCdHctREFrbGRscW9MTEE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Original Donors Spreadsheet
 var DONOR_URL = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Testing Donors Spreadsheet
 var CATEGORIES_URL = "https://spreadsheets.google.com/feeds/cells/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/2/public/basic?alt=json-in-script&callback=?";
+var RESOURCES_URL = "https://spreadsheets.google.com/feeds/cells/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/3/public/basic?alt=json-in-script&callback=?";
 var SCROLL = 704;
 var MAX_NUM_CAT = 7;
 
@@ -10,6 +11,7 @@ var data = new Array();
 var visibleIndex = -1;
 var $ls;
 var categories = [];
+var resources = [];
 
 
 $(function(){
@@ -18,6 +20,13 @@ $(function(){
 	var $nextBtn = $('#next');
 	var $prevBtn = $('#prev');
 	var $list = $('#menu li');
+	var $externalBtn = $('#external-btn');
+	var $externalContainer = $('#external-container');
+	var $externalClose = $('#external-close');
+	var $externalList = $externalContainer.find('ul');
+	var $popups = $('#popup-container');
+	var $popupBg = $('#popup-bg');
+	var $popupClose = $('#popup-close');
 
 	if ($list.length > MAX_NUM_CAT) $nextBtn.show();
 
@@ -37,7 +46,7 @@ $(function(){
 						}
 					});
 					if(!existingLinks){
-						$subCategory.find('.second-menu').append("<li><a href='list.html?category="+encodeURIComponent(s)+"'>"+s+"</a></li>");
+						$subCategory.find('.second-menu').append("<li><a href='list.html?donorcategories="+encodeURIComponent(s)+"'>"+s+"</a></li>");
 					}
 				});
 			}
@@ -46,10 +55,28 @@ $(function(){
 		if(!activeID) activeID = $menu.find('li').first().attr('id');
 		loadMenu(activeID);
 		$('#submenu').removeClass('hidden');
-		$('a:not(.scroll,#external-btn)').click(function(e){
+		$('a:not(.action)').click(function(e){
 			loadMenu($(e.target).parent().attr('id'));
 		});
  	});
+
+	fetchSheet(RESOURCES_URL,resources,function(){
+		resources.forEach(function(r,i){
+			if(r.title && r.title.length != 0 && r.url ) {
+            r.url = r.url && r.url.indexOf("http://") == -1 ? "http://"+r.url : r.url;
+
+				$externalList.append("<li><a id='popup-"+i+"' class='action external' href='#'>"+r.title+"</a></li>");
+				$popups.append("<iframe class='popup-"+i+"' sandbox='allow-same-origin allow-scripts allow-popups allow-forms' src='"+r.url+"'></iframe>");
+				$('#popup-'+i).click(function(){
+					$popups.find('h2').text($(this).text());
+					$popupBg.show();
+					$popups.show();
+					$('iframe.active').removeClass('active');
+					$("iframe."+this.id).addClass('active');
+				});
+			}
+		});
+	});
 
 	//I left this in from the original...could have used fetchSheet but if it's not broke don't fix it.
 	$ls = $('<ul></ul>').appendTo('#left');
@@ -89,8 +116,21 @@ $(function(){
 		$menu.animate({scrollTop:scroll},750);
 	});
 
-	$('#external-btn').click(function(){
+	$externalBtn.click(function(){
+		$(this).animate({top:"-55px"},120);
+		$externalContainer.delay(300).animate({top:"0px"},200);
+	});
 
+	$externalClose.click(function(){
+		var height = $externalContainer.outerHeight() + 2;
+		$externalContainer.animate({top:"-"+height+"px"},200);
+		$externalBtn.delay(300).animate({top:"0px"},120);
+	});
+
+	$popupClose.click(function(){
+		$popupBg.hide();
+		$popups.hide();
+		$('iframe.active').removeClass('active');
 	});
 
 	function loadMenu(id){

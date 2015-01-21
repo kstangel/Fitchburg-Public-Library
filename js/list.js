@@ -2,7 +2,7 @@
 var DONOR_LIST_URL = 'https://spreadsheets.google.com/feeds/list/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/od7/public/basic?hl=en_US&&alt=json-in-script&callback=?'; //Testing Donors Spreadsheet
 var DONOR_CELLS_URL = "https://spreadsheets.google.com/feeds/cells/0AiIFK3GjZaf1dDdsQ3EyNG9PWEV0LVBONzF1MGY0ZlE/1/public/basic?alt=json-in-script&callback=?";
 
-var display_count = 25;
+var display_count = 24;
 var display_time = 10000;
 var data = new Array();
 var visibleIndex = -1;
@@ -29,7 +29,7 @@ $(function(){
 		return false;
 	});*/
 
-	if($_GET['category']){ //Added later on as an update to the kiosk
+	if($_GET['donorcategories']){ //Added later on as an update to the kiosk
 		var category = $_GET['category'];
 		$title.find('h1').text(category);
 		fetchSheet(DONOR_CELLS_URL,donors,function(){

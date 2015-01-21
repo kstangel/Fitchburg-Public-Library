@@ -6,17 +6,17 @@ function fetchSheet(url,array,callback){
 	});
 }
 
-//parse cell data into array
 function parseJSON(json,array){
 	var data = getCellData(json.feed.entry);
 	//parse into useable structure
 	var columns = data[0]; //first row contains labels
 	for(var row = 1; row < data.length; row++){
 		var i = row-1;
+		if (typeof data[row] === 'undefined' || typeof data[row][0] === 'undefined') break;
 		if(!array[i]) array[i] = {};
 		for(var col = 0; col < columns.length; col++){
 			var label = columns[col].toLowerCase().replace(/\W/g,'');
-			var value = data[row][col];
+			value = data[row][col];
 			if(value) array[i][label] = value;
 		}
 		if(!Object.keys(array[i]).length) array.pop(i);
