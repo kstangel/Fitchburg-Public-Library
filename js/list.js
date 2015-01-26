@@ -30,7 +30,7 @@ $(function(){
 	});*/
 
 	if($_GET['donorcategories']){ //Added later on as an update to the kiosk
-		var category = $_GET['category'];
+		var category = $_GET['donorcategories'];
 		$title.find('h1').text(category);
 		fetchSheet(DONOR_CELLS_URL,donors,function(){
 			var numDonors = 0;
@@ -38,7 +38,7 @@ $(function(){
 				if (d.donorcategories){
 					var categories = d.donorcategories.split(',');
 					categories.forEach(function(c,j){
-						if(category.toLowerCase() == c.toLowerCase() && d.fullname.toLowerCase().indexOf('anonymous') == -1 ){
+						if(category.toLowerCase().trim() == c.toLowerCase().trim() && d.fullname.toLowerCase().indexOf('anonymous') == -1 ){
 							if (numDonors % display_count == 0){
 								visibleIndex++;
 								data.push($('<ul></ul>'));

@@ -32,7 +32,7 @@ $(function(){
 
 	fetchSheet(CATEGORIES_URL,categories,function(){
 		categories.forEach(function(c,i){
-			var topLevelLink = c.secondlevelcategory ? '#' : 'list.html?category='+encodeURIComponent(c.toplevelcategory);
+			var topLevelLink = c.secondlevelcategory ? '#' : 'list.html?donorcategories='+encodeURIComponent(c.toplevelcategory);
 			var $subCategory = $("<li id='"+getId(c.toplevelcategory)+"'><a href='"+topLevelLink+"'>"+c.toplevelcategory+"</a><ul class='second-menu'></ul></li>");
 			$menu.append($subCategory);
 			if (c.secondlevelcategory){
